@@ -4,16 +4,18 @@ TSLwatch is a program application that downloads [EU Trusted Lists of Certificat
 
 # Process
 
-* Open TSL URL (https://ec.europa.eu/information_society/policy/esignature/trusted-list/tl-mp.xml)
-	- Validate TSL signature
+Currently it only works on local files and without signature validation. The code is in alpha stage.
+
+* TODO: Open TSL URL (https://ec.europa.eu/information_society/policy/esignature/trusted-list/tl-mp.xml)
+	- TODO: Validate TSL signature
 	- Iterate through tsl:PointersToOtherTSL
 	- For each tsl:OtherTSLPointer
 		- Country TSL URL in tsl:TSLLocation
 			- TSLs in XML format have tslx:MimeType application/vnd.etsi.tsl+xml
 		- Country TSL signing certificate in tsl:X509Certificate
 		- For each country TSL URL
-			- Fetch TSL URL
-			- Validate TSL signature
+			- TODO: Fetch TSL URL
+			- TODO: Validate TSL signature
 			- Iterate through tsl:TrustServiceProviderList
 			- For each tsl:TrustServiceProvider
 				- Certificate is in tsl:X509Certificate
