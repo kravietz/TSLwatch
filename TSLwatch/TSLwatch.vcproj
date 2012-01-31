@@ -173,19 +173,19 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\base64.c"
+				RelativePath=".\Base64.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						CompileAs="1"
+						CompileAs="2"
 					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\insertStore.cpp"
+				RelativePath=".\certStore.cpp"
 				>
 			</File>
 			<File
@@ -217,6 +217,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\TslFetch.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\TSLwatch.cpp"
 				>
 			</File>
@@ -227,11 +231,23 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\resource1.h"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.h"
 				>
 			</File>
 			<File
 				RelativePath=".\targetver.h"
+				>
+			</File>
+			<File
+				RelativePath=".\tslwatch.h"
 				>
 			</File>
 		</Filter>
@@ -241,14 +257,50 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
+				RelativePath=".\messages.mc"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Messages..."
+						CommandLine="mc $(InputFileName)"
+						Outputs="$(InputName).rc;$(InputName).h;MSG0409.bin"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Compiling Messages..."
+						CommandLine="mc %(FullPath)"
+						Outputs="%(Filename).rc;%(Filename).h;MSG0409.bin"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\messages.rc"
+				>
+			</File>
+			<File
 				RelativePath=".\PL_TSL.xml"
 				>
 			</File>
+			<File
+				RelativePath=".\resource.rc"
+				>
+			</File>
+			<File
+				RelativePath=".\tl-mp.xml"
+				>
+			</File>
+			<File
+				RelativePath=".\TSLwatch.rc"
+				>
+			</File>
 		</Filter>
-		<File
-			RelativePath=".\README.md"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
