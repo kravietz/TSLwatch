@@ -26,3 +26,9 @@ obj/
 [Rr]elease*/
 _ReSharper*/
 [Tt]est[Rr]esult*
+TSLwatch/messages.h
+TSLwatch/messages.rc
+TSLwatch/messages.res
+TSLwatch/MSG00409.bin
+TSLwatch/parseTSL.cpp
+TSLwatch/resource.h
