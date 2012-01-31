@@ -1,10 +1,6 @@
 #include "stdafx.h"
 
-extern "C" INT UnBase64(BYTE * dest, LPCTSTR src, INT srclen);
-extern void LogError(LPCSTR function, LPCWSTR operation);
-
-/*
- */
+extern INT UnBase64(BYTE * dest, LPCTSTR src, INT srclen);
 
 BOOL insertIntoSystemStore(IN HCERTSTORE hSystemStore, IN LPTSTR certificate_base64) {
 
@@ -27,7 +23,7 @@ BOOL insertIntoSystemStore(IN HCERTSTORE hSystemStore, IN LPTSTR certificate_bas
 
 	certificate_ctx = CertCreateCertificateContext(X509_ASN_ENCODING, certificate_asn1, certificate_asn1_len);
 	if(FAILED(certificate_ctx)) {
-		LogError(__FUNCTION__, L"CertCreateCertificateContext");
+		//LogError(__FUNCTION__, L"CertCreateCertificateContext");
 		return FALSE;
 	}
 
@@ -38,7 +34,7 @@ BOOL insertIntoSystemStore(IN HCERTSTORE hSystemStore, IN LPTSTR certificate_bas
 		0, NULL, // OIDs
 		pszNameString, sizeof(pszNameString));
 	if(FAILED(dwRet)) {
-		LogError(__FUNCTION__, L"CertGetNameString");
+		//LogError(__FUNCTION__, L"CertGetNameString");
 	}
 	if(dwRet == 1) {
 		wprintf(L"CertGetNameString: Certificate name not found\n");
@@ -52,7 +48,7 @@ BOOL insertIntoSystemStore(IN HCERTSTORE hSystemStore, IN LPTSTR certificate_bas
 	ret = CertAddEncodedCertificateToStore(hSystemStore, X509_ASN_ENCODING, certificate_asn1,
 		certificate_asn1_len, CERT_STORE_ADD_NEW, NULL);
 	if(!SUCCEEDED(ret)) {
-		LogError(__FUNCTION__, L"CertAddEncodedCertificateToStore");
+		//LogError(__FUNCTION__, L"CertAddEncodedCertificateToStore");
 		return FALSE;
 	}
 

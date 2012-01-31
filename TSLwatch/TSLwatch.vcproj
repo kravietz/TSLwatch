@@ -189,10 +189,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\LogError.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\parseTsl2.cpp"
 				>
 			</File>
@@ -221,7 +217,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\TSLwatch.cpp"
+				RelativePath=".\TSLwatchMain.cpp"
 				>
 			</File>
 		</Filter>
@@ -231,11 +227,11 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\resource.h"
+				RelativePath=".\messages.h"
 				>
 			</File>
 			<File
-				RelativePath=".\resource1.h"
+				RelativePath=".\resource.h"
 				>
 			</File>
 			<File
@@ -265,8 +261,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Compiling Messages..."
-						CommandLine="mc $(InputFileName)"
-						Outputs="$(InputName).rc;$(InputName).h;MSG0409.bin"
+						CommandLine="mc $(InputFileName)&#x0D;&#x0A;rc $(InputName).rc&#x0D;&#x0A;link /dll /noentry /machine:X86 $(InputName).res"
+						Outputs="$(InputName).rc;$(InputName).h;$(InputName).dll;MSG0409.bin"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -279,10 +275,6 @@
 						Outputs="%(Filename).rc;%(Filename).h;MSG0409.bin"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\messages.rc"
-				>
 			</File>
 			<File
 				RelativePath=".\PL_TSL.xml"

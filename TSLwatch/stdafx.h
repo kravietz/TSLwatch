@@ -16,3 +16,7 @@
 #include <strsafe.h>
 
 #include <shlwapi.h>
+
+#include "tslwatch.h"
+
+#include "messages.h"

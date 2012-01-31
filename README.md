@@ -23,3 +23,8 @@ Currently it only works on local files and without signature validation. The cod
 				- Check if this certificate is installed in certificate system store
 					- If not, install it				
 * Use tsl:NextUpdate to schedule next run of TSLwatch
+
+# Installer
+HKLM\System\CurrentControlSet\Services\eventlog\Application\TSLwatch
+TypesSupported (REG_DWORD) = 7
+EventMessageFile (REG_EXPAND_SZ) 
