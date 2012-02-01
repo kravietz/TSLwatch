@@ -227,14 +227,6 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\messages.h"
-				>
-			</File>
-			<File
-				RelativePath=".\resource.h"
-				>
-			</File>
-			<File
 				RelativePath=".\stdafx.h"
 				>
 			</File>
@@ -253,6 +245,10 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
+				RelativePath=".\Events.reg"
+				>
+			</File>
+			<File
 				RelativePath=".\messages.mc"
 				>
 				<FileConfiguration
@@ -261,7 +257,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Compiling Messages..."
-						CommandLine="mc $(InputFileName)&#x0D;&#x0A;rc $(InputName).rc&#x0D;&#x0A;link /dll /noentry /machine:X86 $(InputName).res"
+						CommandLine="mc $(InputFileName)&#x0D;&#x0A;rc $(InputName).rc&#x0D;&#x0A;rem link /dll /noentry /machine:X86 $(InputName).res"
 						Outputs="$(InputName).rc;$(InputName).h;$(InputName).dll;MSG0409.bin"
 					/>
 				</FileConfiguration>
