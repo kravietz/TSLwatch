@@ -12,6 +12,8 @@ IXMLDOMDocument2Ptr TslFetch(LPCWSTR url) {
 	IXMLHTTPRequestPtr pIXMLHTTPRequest = NULL;
 	IXMLDOMDocument2Ptr responseXML;
 	LONG httpStatus;
+
+	wprintf(L"Fetching %s... ", url);
 	
 	// CoInitialize() must be called in parent function
 	try
@@ -30,6 +32,8 @@ IXMLDOMDocument2Ptr TslFetch(LPCWSTR url) {
 
       hr = pIXMLHTTPRequest->get_responseXML((IDispatch**) &responseXML);
 	  SUCCEEDED(hr) ? 0 : throw hr;
+
+	  wprintf(L"done\n");
 
 	  return responseXML;
 
