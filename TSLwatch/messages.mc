@@ -41,6 +41,12 @@ SymbolicName=NEED_ADMIN
 Language=English
 This application must be run with administrator priviledges.
 .
+MessageId=23
+Severity=Error
+SymbolicName=TSL_PARSE_START
+Language=English
+This application must be run with administrator priviledges.
+.
 MessageId=100
 SymbolicName=GENERIC_OK
 Language=English

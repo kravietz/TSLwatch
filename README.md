@@ -8,7 +8,6 @@ Currently it only works on local files and without signature validation. The cod
 
 * TODO: Open TSL URL (https://ec.europa.eu/information_society/policy/esignature/trusted-list/tl-mp.xml)
 	- TODO: Validate TSL signature
-	- Iterate through tsl:PointersToOtherTSL
 	- For each tsl:OtherTSLPointer
 		- Country TSL URL in tsl:TSLLocation
 			- TSLs in XML format have tslx:MimeType application/vnd.etsi.tsl+xml
@@ -28,3 +27,5 @@ Currently it only works on local files and without signature validation. The cod
 HKLM\System\CurrentControlSet\Services\eventlog\Application\TSLwatch
 TypesSupported (REG_DWORD) = 7
 EventMessageFile (REG_EXPAND_SZ) 
+
+Currently added to Events.reg
