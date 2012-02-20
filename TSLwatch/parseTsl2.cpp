@@ -3,10 +3,15 @@
 #import <msxml6.dll>
 using namespace MSXML2;
 
-// external functions
-extern IXMLDOMDocument2Ptr TslFetch(LPCWSTR url);
+// external vars
 extern HANDLE hEventLog;
 
+// external functions
+extern IXMLDOMDocument2Ptr TslFetch(PSTR url);
+extern BOOL isKnownUrl(const char *url, TURLListPtr list);
+extern BOOL addUrl(LPCSTR url, TURLListPtr *list);
+
+// local functions
 void dump_com_error(_com_error &e);
 
 #define DSIGNS L"xmlns:tsl='http://uri.etsi.org/02231/v2#' xmlns:tslx='http://uri.etsi.org/02231/v2/additionaltypes#'"
@@ -15,7 +20,7 @@ void dump_com_error(_com_error &e);
 // http://msdn.microsoft.com/en-us/library/windows/desktop/ms754523(v=vs.85).aspx
 // http://support.microsoft.com/kb/316317
 
-BOOL parseTSL(LPCWSTR url, TCertListPtr pCertList) 
+BOOL parseTSL(PSTR url, TCertListPtr pCertList, TURLListPtr URLListPtr) 
 {
 	IXMLDOMDocument2Ptr pXMLDoc;
 	LPWSTR pInsertStrings[2] = {NULL, NULL};
@@ -25,10 +30,13 @@ BOOL parseTSL(LPCWSTR url, TCertListPtr pCertList)
 	MSXML2::IXMLDOMNodeListPtr pXMLDomNodeList = NULL;
 	INT i;
 
-	pInsertStrings[0] = StrDup(url);
+	pInsertStrings[0] = (LPWSTR) strdup(url);
 	ret = ReportEvent(hEventLog, EVENTLOG_INFORMATION_TYPE, CAT_TSL_PARSER, TSL_PARSE_START, NULL, 1, 0, (LPCWSTR*)pInsertStrings, NULL);
 
-	wprintf(L"Parsing %s...", url);
+	printf("Parsing %s...", url);
+
+	// add currently processed URL
+	ret = addUrl( url, &URLListPtr);
 
 	// initialize XML trees
 	CoInitialize(NULL);
@@ -41,7 +49,7 @@ BOOL parseTSL(LPCWSTR url, TCertListPtr pCertList)
 		//HRESULT hr = pXMLDoc.CreateInstance(__uuidof(DOMDocument60));
 
 		// Set parser property settings
-		pXMLDoc->async =  VARIANT_FALSE;
+		
 
 		// Load the sample XML file
 		//hr = pXMLDoc->load("PL_TSL.xml");
@@ -59,6 +67,7 @@ BOOL parseTSL(LPCWSTR url, TCertListPtr pCertList)
 		}
 		*/
 		// Initialize XML parser
+		pXMLDoc->async =  VARIANT_FALSE;
 		pXMLDoc->setProperty("SelectionLanguage", "XPath");
 		pXMLDoc->setProperty("SelectionNamespaces",	DSIGNS);
 		
@@ -88,14 +97,34 @@ BOOL parseTSL(LPCWSTR url, TCertListPtr pCertList)
 
 		for(i=0; i<count; i++) {
 			MSXML2::IXMLDOMElementPtr current_elem = NULL;
+			/*
 			MSXML2::IXMLDOMNodeListPtr subNodeList = NULL;
 			MSXML2::IXMLDOMNodePtr mimeType = NULL, url = NULL;
+			*/
 			BSTR tagName;
+			BSTR newUrl;
+			PSTR copyNewUrl;
 			
 			current_elem = pXMLDomNodeList->item[i]; // we are at OtherTSLPointer level
 			tagName = current_elem->tagName;
-			wprintf(L"tag=%s text=%s\n", (LPTSTR) tagName, (LPTSTR) current_elem->text);
-			ret = parseTSL((LPTSTR) current_elem->text, pCertList);
+			newUrl =  current_elem->text;
+
+			wprintf(L"Found tag=%s text=%s\n", (LPWSTR) tagName, (LPWSTR) newUrl);
+			copyNewUrl = (PSTR) malloc(wcslen(newUrl)*2);
+			WideCharToMultiByte(CP_ACP, 0, newUrl, -1, copyNewUrl, wcslen(newUrl)*2, NULL, NULL);
+			printf("%s\n", copyNewUrl);
+			
+			// so that the value is not overwritten on recursive calls
+			//copyNewUrl = _strdup( (PSTR) newUrl);
+			printf("%s\n", copyNewUrl);
+
+			// need to check duplicate urls because most TSL will publish reference to EU TSL
+			if(isKnownUrl((PSTR) copyNewUrl, URLListPtr) == false) {
+				// if this TSL wasn't previously parse, do it now
+				ret = parseTSL( copyNewUrl, pCertList, URLListPtr);
+			}
+
+
 			//subNodeList = current_elem->selectNodes(L"//tslx:MimeType");
 			//mimeType = current_elem->selectSingleNode(L"//tsl:OtherTSLPointer/tsl:AdditionalInformation/tsl:OtherInformation[tslx:MimeType='application/vnd.etsi.tsl+xml']");
 			//wprintf(L"MimeType=%s\n", (LPTSTR) mimeType->text);
