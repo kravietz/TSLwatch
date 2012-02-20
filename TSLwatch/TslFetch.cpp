@@ -6,14 +6,14 @@ using namespace MSXML2;
 // defined in parseTsl
 extern void dump_com_error(_com_error &e);
 
-IXMLDOMDocument2Ptr TslFetch(LPCWSTR url) {
+IXMLDOMDocument2Ptr TslFetch(PSTR url) {
 	HRESULT hr;
 	BSTR bstrString = NULL;
 	IXMLHTTPRequestPtr pIXMLHTTPRequest = NULL;
 	IXMLDOMDocument2Ptr responseXML;
 	LONG httpStatus;
 
-	wprintf(L"Fetching %s... ", url);
+	printf("Fetching %s... ", url);
 	
 	// CoInitialize() must be called in parent function
 	try
