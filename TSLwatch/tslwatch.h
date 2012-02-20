@@ -1,9 +1,20 @@
+// storage list for certificates extracted from all TSLs
 struct CertList {
-	LPTSTR *cert_list;
-	DWORD cert_list_index;
+	// cert list if table of tchar pointers
+	PSTR *cert_list;
+	// number of items on the list
+	DWORD count;
+};
+
+struct URLList {
+	// URLs extracted from TSL used to avoid double checking the same TSL
+	PSTR *url_list;
+	// number of items on the list
+	DWORD count;
 };
 
 typedef struct CertList * TCertListPtr;
+typedef struct URLList	* TURLListPtr;
 
 struct options {
 	BOOL foreground;
