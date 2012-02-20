@@ -220,6 +220,10 @@
 				RelativePath=".\TSLwatchMain.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\URLList.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -257,7 +261,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Compiling Messages..."
-						CommandLine="mc $(InputFileName)&#x0D;&#x0A;rc $(InputName).rc&#x0D;&#x0A;rem link /dll /noentry /machine:X86 $(InputName).res"
+						CommandLine="mc $(InputFileName)&#x0D;&#x0A;rc $(InputName).rc&#x0D;&#x0A;rem link /dll /noentry /machine:X86 $(InputName).res&#x0D;&#x0A;"
 						Outputs="$(InputName).rc;$(InputName).h;$(InputName).dll;MSG0409.bin"
 					/>
 				</FileConfiguration>
@@ -267,7 +271,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Compiling Messages..."
-						CommandLine="mc %(FullPath)"
+						CommandLine="mc %(FullPath)&#x0D;&#x0A;"
 						Outputs="%(Filename).rc;%(Filename).h;MSG0409.bin"
 					/>
 				</FileConfiguration>
