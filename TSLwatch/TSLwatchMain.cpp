@@ -5,11 +5,13 @@
 // global structured defined here
 static struct options options;			// from command line options
 static struct CertList GlobalCertList;	// this stores list of certificates to add to store
+static struct URLList GlobalURLList;
 HANDLE hEventLog;						// for logging
 
 // external functions
 extern BOOL insertIntoSystemStore(IN HCERTSTORE hSystemStore, IN LPTSTR certificate_base64);
-extern BOOL parseTSL(LPCWSTR url, TCertListPtr pCertList);
+extern BOOL parseTSL(PSTR url, TCertListPtr pCertList, TURLListPtr URLListPtr);
+extern BOOL addUrl(LPCSTR url, TURLListPtr *list);
 
 int _tmain(int argc, _TCHAR* argv[]) {
 	HCERTSTORE  hSystemStore;              // system store handle
@@ -24,9 +26,11 @@ int _tmain(int argc, _TCHAR* argv[]) {
 			options.debug = true;
 	}
 	
-	// initialize global certificate list structure
+	// initialize global certificate & URL list structure
 	GlobalCertList.cert_list = NULL;
-	GlobalCertList.cert_list_index = 0L;
+	GlobalCertList.count = 0L;
+	GlobalURLList.url_list = NULL;
+	GlobalURLList.count = 0L;
 
 	// register us at EventLog
 	hEventLog = RegisterEventSource(NULL, L"TSLwatch");
@@ -61,20 +65,21 @@ int _tmain(int argc, _TCHAR* argv[]) {
 		exit(1);
 	}
 
-#define EU_TSL  L"https://ec.europa.eu/information_society/policy/esignature/trusted-list/tl-mp.xml"
+#define EU_TSL  "https://ec.europa.eu/information_society/policy/esignature/trusted-list/tl-mp.xml"
 	
-	ret = parseTSL(EU_TSL, &GlobalCertList);
+	// initialize visited URL list with the starting TSL address
+	ret = parseTSL(EU_TSL, &GlobalCertList, &GlobalURLList);
 	if(ret == false) {
 		exit(1);
 	}
 
 	for(i=0;;) {
-		LPTSTR cert;
+		PSTR cert;
 		cert = GlobalCertList.cert_list[i];
 		if(cert == NULL)
 			break;
-		//insertIntoSystemStore(hSystemStore, cert);
-		wprintf(L"Add to store %s\n", cert); 
+		//XXX insertIntoSystemStore(hSystemStore, cert);
+		printf("Add to store %s\n", cert); 
 		i += 1;
 	}
 
