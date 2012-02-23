@@ -10,6 +10,7 @@ extern HANDLE hEventLog;
 extern IXMLDOMDocument2Ptr TslFetch(PSTR url);
 extern BOOL isKnownUrl(const char *url, TURLListPtr list);
 extern BOOL addUrl(LPCSTR url, TURLListPtr *list);
+extern BOOL addCert(LPCSTR cert, TCertListPtr * listPtr);
 
 // local functions
 void dump_com_error(_com_error &e);
@@ -30,10 +31,10 @@ BOOL parseTSL(PSTR url, TCertListPtr pCertList, TURLListPtr URLListPtr)
 	MSXML2::IXMLDOMNodeListPtr pXMLDomNodeList = NULL;
 	INT i;
 
-	pInsertStrings[0] = (LPWSTR) strdup(url);
+	pInsertStrings[0] = (LPWSTR) _strdup(url);
 	ret = ReportEvent(hEventLog, EVENTLOG_INFORMATION_TYPE, CAT_TSL_PARSER, TSL_PARSE_START, NULL, 1, 0, (LPCWSTR*)pInsertStrings, NULL);
 
-	printf("Parsing %s...", url);
+	//printf("Parsing %s...", url);
 
 	// add currently processed URL
 	ret = addUrl( url, &URLListPtr);
@@ -87,6 +88,9 @@ BOOL parseTSL(PSTR url, TCertListPtr pCertList, TURLListPtr URLListPtr)
 		//	+- AdditionalInformation
 		//		+- OtherInformation*
 		//			+- tslx:MimeType				MIME - need this to skip PDF files
+		//      +- OtherInformation*
+		//          +- schemaOperatorName
+		//              +- Name
 
 		// Retrieve sub-TSLs posted as XML
 		searchTerm = L"//tsl:TSLLocation[../tsl:AdditionalInformation/tsl:OtherInformation/tslx:MimeType='application/vnd.etsi.tsl+xml']";
@@ -101,6 +105,8 @@ BOOL parseTSL(PSTR url, TCertListPtr pCertList, TURLListPtr URLListPtr)
 			MSXML2::IXMLDOMNodeListPtr subNodeList = NULL;
 			MSXML2::IXMLDOMNodePtr mimeType = NULL, url = NULL;
 			*/
+			MSXML2::IXMLDOMElementPtr cert_elem = NULL;
+			MSXML2::IXMLDOMElementPtr name_elem = NULL;
 			BSTR tagName;
 			BSTR newUrl;
 			PSTR copyNewUrl;
@@ -112,11 +118,11 @@ BOOL parseTSL(PSTR url, TCertListPtr pCertList, TURLListPtr URLListPtr)
 			wprintf(L"Found tag=%s text=%s\n", (LPWSTR) tagName, (LPWSTR) newUrl);
 			copyNewUrl = (PSTR) malloc(wcslen(newUrl)*2);
 			WideCharToMultiByte(CP_ACP, 0, newUrl, -1, copyNewUrl, wcslen(newUrl)*2, NULL, NULL);
-			printf("%s\n", copyNewUrl);
+			//printf("%s\n", copyNewUrl);
 			
 			// so that the value is not overwritten on recursive calls
 			//copyNewUrl = _strdup( (PSTR) newUrl);
-			printf("%s\n", copyNewUrl);
+			//printf("%s\n", copyNewUrl);
 
 			// need to check duplicate urls because most TSL will publish reference to EU TSL
 			if(isKnownUrl((PSTR) copyNewUrl, URLListPtr) == false) {
@@ -124,10 +130,33 @@ BOOL parseTSL(PSTR url, TCertListPtr pCertList, TURLListPtr URLListPtr)
 				ret = parseTSL( copyNewUrl, pCertList, URLListPtr);
 			}
 
+		//	+- AdditionalInformation
+		//		+- OtherInformation*
+		//			+- tslx:MimeType				MIME - need this to skip PDF files
+		//      +- OtherInformation*
+		//          +- schemaOperatorName
+		//              +- Name
 
 			//subNodeList = current_elem->selectNodes(L"//tslx:MimeType");
 			//mimeType = current_elem->selectSingleNode(L"//tsl:OtherTSLPointer/tsl:AdditionalInformation/tsl:OtherInformation[tslx:MimeType='application/vnd.etsi.tsl+xml']");
 			//wprintf(L"MimeType=%s\n", (LPTSTR) mimeType->text);
+			/*
+			name_elem = current_elem->selectSingleNode(L"../tsl:AdditionalInformation/tsl:OtherInformation/tsl:SchemaOperatorName/tsl:Name");
+			if(cert_elem == NULL) {
+				printf("No SchemaOperatorName in TSL: %s\n", copyNewUrl);
+			} else {
+				printf("name=%s\n", (PSTR) name_elem->text);
+			}
+			*/
+
+			cert_elem = current_elem->selectSingleNode(L"../tsl:ServiceDigitalIdentities/tsl:ServiceDigitalIdentity/tsl:DigitalId/tsl:X509Certificate");
+			if(cert_elem == NULL) {
+				printf("No certificate found in TSL: %s\n", copyNewUrl);
+			} else {
+				ret = addCert((PSTR) cert_elem->text, &pCertList);
+				printf("cert=%s\n", (PSTR) cert_elem->text);
+			}
+
 			//mimeType = current_elem->selectSingleNode(L"tsl:AdditionalInformation/tsl:OtherInformation/tslx:MimeType");
 			//wprintf(L"MimeType=%s\n", (LPTSTR) mimeType->text);
 			//mimeType = current_elem->selectSingleNode(L"./tsl:AdditionalInformation/tsl:OtherInformation/tslx:MimeType");
@@ -141,7 +170,8 @@ BOOL parseTSL(PSTR url, TCertListPtr pCertList, TURLListPtr URLListPtr)
 			}*/
 		}
 
-		return false;
+		return true;
+		//return false;
 
 		// ADD FOUND CERTS TO OUR GLOBAL CERT LIST
 
