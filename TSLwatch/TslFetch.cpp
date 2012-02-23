@@ -13,7 +13,7 @@ IXMLDOMDocument2Ptr TslFetch(PSTR url) {
 	IXMLDOMDocument2Ptr responseXML;
 	LONG httpStatus;
 
-	printf("Fetching %s... ", url);
+	//printf("Fetching %s... ", url);
 	
 	// CoInitialize() must be called in parent function
 	try
