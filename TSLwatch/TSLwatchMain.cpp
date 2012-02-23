@@ -16,10 +16,10 @@ extern BOOL addUrl(LPCSTR url, TURLListPtr *list);
 int _tmain(int argc, _TCHAR* argv[]) {
 	HCERTSTORE  hSystemStore;              // system store handle
 	BOOL ret;
-	INT i;
+	DWORD i;
 
 	// parse command line options
-	for(i=1; i<argc; i++) {
+	for(i=1; i< (DWORD)argc; i++) {
 		if(strncmp((const char*)argv[i], "-foreground", sizeof("foreground")) == 0)
 			options.foreground = true;
 		if(strncmp((const char*) argv[i], "-debug", sizeof("debug")) == 0)
@@ -67,20 +67,22 @@ int _tmain(int argc, _TCHAR* argv[]) {
 
 #define EU_TSL  "https://ec.europa.eu/information_society/policy/esignature/trusted-list/tl-mp.xml"
 	
-	// initialize visited URL list with the starting TSL address
+	/* initialize visited URL list with the starting TSL address
+	   and recursively parse the list and its children */
 	ret = parseTSL(EU_TSL, &GlobalCertList, &GlobalURLList);
 	if(ret == false) {
 		exit(1);
 	}
 
-	for(i=0;;) {
+	/* Walk through found certs and add them to the Windows store */
+	for(i=0; i < GlobalCertList.count; i++) {
 		PSTR cert;
 		cert = GlobalCertList.cert_list[i];
 		if(cert == NULL)
 			break;
+		printf("Adding to store %s\n", cert); 
 		//XXX insertIntoSystemStore(hSystemStore, cert);
-		printf("Add to store %s\n", cert); 
-		i += 1;
+		
 	}
 
 	// When done using the store, close it.
