@@ -1,16 +1,5 @@
 #include "stdafx.h"
 
-/*
-INT urlCount(TURLListPtr list) {
-	INT i;
-	if(list == NULL)
-		return 0;
-	for(i=0;true;i++) {
-		if(list[i] == NULL)
-			return i;
-	}
-} // urlCount
-*/
 
 DWORD urlCount(TURLListPtr list) {
 	return list->count;
@@ -28,22 +17,12 @@ BOOL isKnownUrl(LPCSTR url, TURLListPtr list) {
 		}
 	}
 	return false;
-	/*
-	if(list == NULL)
-		return false;
-	for(i=0;true;i++) {
-		if(list[i] == NULL)
-			return false; // this means we haven't found a match yet
-		if( strcmp((const char *) list[i],  url) == 0)
-			return true;
-	}
-	*/
 } // isKnownUrl
 
 // we need to replace the global list here
 // so ** is needed
 BOOL addUrl(LPCSTR url, TURLListPtr * listPtr) {
-	DWORD count;
+	DWORD count, i;
 	SIZE_T byteSize, oldByteSize;
 	TURLListPtr list;
 	PSTR *new_list;
@@ -57,13 +36,19 @@ BOOL addUrl(LPCSTR url, TURLListPtr * listPtr) {
 	count += 1; // grow for new URL
 	byteSize = count * sizeof(PSTR);
 
+	// allocate new list
 	new_list = (PSTR *) realloc((void *) old_list, byteSize);
 	if(new_list == NULL)
 		return false;
 
-	memcpy(new_list, old_list, oldByteSize);
+	/* copy old pointers to new list */
+	for(i=0; i<count-1; i++) {
+		new_list[count] = old_list[count];
+	}
+	// add the new url
 	new_list[count-1] = _strdup(url);
 
+	// replace the list at its original pointer
 	(*listPtr)->url_list = new_list;
 	(*listPtr)->count = count;
 	return true;
