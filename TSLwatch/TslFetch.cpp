@@ -1,3 +1,8 @@
+/* Uses HTTPRequest methods to download the TSL file in XML format. 
+ * Takes URL on input
+ * Outputs pointer to XML document structure
+ */
+
 #include "stdafx.h"
 
 #import <msxml6.dll>
@@ -12,19 +17,17 @@ IXMLDOMDocument2Ptr TslFetch(PSTR url) {
 	IXMLHTTPRequestPtr pIXMLHTTPRequest = NULL;
 	IXMLDOMDocument2Ptr responseXML;
 	LONG httpStatus;
-
-	//printf("Fetching %s... ", url);
 	
 	// CoInitialize() must be called in parent function
 	try
 	{
-		hr=pIXMLHTTPRequest.CreateInstance(("MSXML2.XMLHTTP.6.0"));
+		hr = pIXMLHTTPRequest.CreateInstance(("MSXML2.XMLHTTP.6.0"));
 		SUCCEEDED(hr) ? 0 : throw hr;
 
-		hr=pIXMLHTTPRequest->open("GET", url, false);
+		hr = pIXMLHTTPRequest->open("GET", url, false);
 		SUCCEEDED(hr) ? 0 : throw hr;
 
-		hr=pIXMLHTTPRequest->send();
+		hr = pIXMLHTTPRequest->send();
       SUCCEEDED(hr) ? 0 : throw hr;
 
 	  hr = pIXMLHTTPRequest->get_status(&httpStatus);
