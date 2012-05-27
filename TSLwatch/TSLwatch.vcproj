@@ -193,7 +193,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\parseTsl2.cpp"
+				RelativePath=".\parseChildTsl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\parseRootTsl.cpp"
 				>
 			</File>
 			<File
