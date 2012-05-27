@@ -1,3 +1,5 @@
+/* Pure C implementation of BASE64 decoder for TSLWatch */
+
 #include "stdafx.h"
 
 static const TCHAR  table[] = L"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
