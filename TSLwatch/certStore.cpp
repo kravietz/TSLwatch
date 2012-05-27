@@ -1,3 +1,8 @@
+/* Insert certificate into system certificate store using CryptoAPI.
+ * Input: open certificate store pointer, BASE64 encoded certificate string.
+ * Output: status
+ */
+
 #include "stdafx.h"
 
 extern INT UnBase64(BYTE * dest, LPCTSTR src, INT srclen);
