@@ -1,4 +1,12 @@
+/* This structure holds list of certificates that are extracted from TSL. Then it's iterated in the main module.
+ * Certificates are stored as LPCSTR (ASCII) because this is what the CryptoAPI functions take as input.
+ */
+
 #include "stdafx.h"
+
+DWORD certCount(TCertListPtr list) {
+	return list->count;
+}
 
 // we need to replace the global list here
 // so ** is needed
