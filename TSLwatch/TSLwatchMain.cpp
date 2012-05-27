@@ -10,7 +10,7 @@ HANDLE hEventLog;						// for logging
 
 // external functions
 extern BOOL insertIntoSystemStore(IN HCERTSTORE hSystemStore, IN LPTSTR certificate_base64);
-extern BOOL parseTSL(PSTR url, TCertListPtr pCertList, TURLListPtr URLListPtr);
+extern BOOL parseRootTsl(PSTR url, TCertListPtr pCertList, TURLListPtr URLListPtr);
 extern BOOL addUrl(LPCSTR url, TURLListPtr *list);
 
 int _tmain(int argc, _TCHAR* argv[]) {
@@ -47,7 +47,7 @@ int _tmain(int argc, _TCHAR* argv[]) {
 	// TSLwatch needs to run as a admin to access it
 	// otherwise each certificate will result in a confirmation prompt
 	//hSystemStore = CertOpenStore(CERT_STORE_PROV_SYSTEM, 0, 0, CERT_SYSTEM_STORE_LOCAL_MACHINE, "Root");
-	hSystemStore = CertOpenSystemStore(NULL, L"Disallowed");
+	hSystemStore = CertOpenSystemStore(NULL, L"Disallowed"); // XXX - blacklist store only used for testing
 	if(hSystemStore == NULL) 	{
 		GET_ERR(lpMsgBuf);
 		
@@ -67,9 +67,8 @@ int _tmain(int argc, _TCHAR* argv[]) {
 
 #define EU_TSL  "https://ec.europa.eu/information_society/policy/esignature/trusted-list/tl-mp.xml"
 	
-	/* initialize visited URL list with the starting TSL address
-	   and recursively parse the list and its children */
-	ret = parseTSL(EU_TSL, &GlobalCertList, &GlobalURLList);
+	// parse the root TSL
+	ret = parseRootTsl(EU_TSL, &GlobalCertList, &GlobalURLList);
 	if(ret == false) {
 		exit(1);
 	}
@@ -80,7 +79,6 @@ int _tmain(int argc, _TCHAR* argv[]) {
 		cert = GlobalCertList.cert_list[i];
 		if(cert == NULL)
 			break;
-		printf("Adding to store %s\n", cert); 
 		//XXX insertIntoSystemStore(hSystemStore, cert);
 		
 	}
