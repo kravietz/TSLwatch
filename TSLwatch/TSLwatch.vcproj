@@ -239,6 +239,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\resource.h"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.h"
 				>
 			</File>
@@ -257,39 +261,7 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath=".\Events.reg"
-				>
-			</File>
-			<File
-				RelativePath=".\messages.mc"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Compiling Messages..."
-						CommandLine="mc $(InputFileName)&#x0D;&#x0A;rc $(InputName).rc&#x0D;&#x0A;rem link /dll /noentry /machine:X86 $(InputName).res&#x0D;&#x0A;"
-						Outputs="$(InputName).rc;$(InputName).h;$(InputName).dll;MSG0409.bin"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Compiling Messages..."
-						CommandLine="mc %(FullPath)&#x0D;&#x0A;"
-						Outputs="%(Filename).rc;%(Filename).h;MSG0409.bin"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\PL_TSL.xml"
-				>
-			</File>
-			<File
-				RelativePath=".\resource.rc"
 				>
 			</File>
 			<File
@@ -301,6 +273,34 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\Events.reg"
+			>
+		</File>
+		<File
+			RelativePath=".\messages.mc"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="Compiling Messages..."
+					CommandLine="mc $(InputFileName)&#x0D;&#x0A;rc $(InputName).rc&#x0D;&#x0A;rem link /dll /noentry /machine:X86 $(InputName).res&#x0D;&#x0A;"
+					Outputs="$(InputName).rc;$(InputName).h;$(InputName).dll;MSG0409.bin"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="Compiling Messages..."
+					CommandLine="mc %(FullPath)&#x0D;&#x0A;"
+					Outputs="%(Filename).rc;%(Filename).h;MSG0409.bin"
+				/>
+			</FileConfiguration>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
